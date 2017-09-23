@@ -32,7 +32,7 @@ public class Main {
 
 	// to avoid collisions when outputting new images in the same folder
 	private static boolean  MAKE_UP_NAME = true;
-	private static int          MAKE_UP_NAME_CONSTANT = 15;
+	private static int      MAKE_UP_NAME_CONSTANT = 15;
 
 	// byte arrays in which images are stored
 	private static byte[] ORIGINAL_IMAGE;
