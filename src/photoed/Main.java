@@ -59,20 +59,12 @@ public class Main {
 
 
 	public static void main (String[] args) throws IOException {
+		double start_time = System.nanoTime();
+		String inputfilename = args[0];
 
-		START_TIME = System.nanoTime();
-		ORIGINAL_IMAGE = initializeImage(IMAGE_PATH, CREATE_COPY);
+		new Pic(inputfilename).write("output.png");
 
-		for (int time = 1; time < 30; time ++) {
-
-
-
-			FILTERED_IMAGE = FilterDual.ranFil(ORIGINAL_IMAGE, time);
-
-			outputImage(FILTERED_IMAGE, OUTPUT_PATH, OUTPUT_NAME, time, MAKE_UP_NAME);
-
-		}
-		printRuntime();
+		printRuntime(start_time);
 	}
 
 
@@ -162,8 +154,8 @@ public class Main {
 
 	// prints how long it took the program to complete
 
-	public static void printRuntime() {
-		System.out.println( "The program completed in " + ((System.nanoTime() - START_TIME)/1000000000.0) + " seconds.");
+	private static void printRuntime(double start_time) {
+		System.out.println( "The program completed in " + ((System.nanoTime() - start_time)/1000000000.0) + " seconds.");
 	}
 
 
