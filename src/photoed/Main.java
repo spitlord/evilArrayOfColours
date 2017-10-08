@@ -1,5 +1,8 @@
 package photoed;
 
+
+import photoed.filters.*;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ComponentColorModel;
@@ -24,6 +27,35 @@ import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 
 public class Main {
+
+	public static void main (String[] args) throws IOException {
+		double start_time = System.nanoTime();
+		String inputfilename = args[0];
+
+		(new Pixelwise(
+			(byte[] rgb) -> (new byte[]{
+				rgb[2],
+				rgb[1],
+				rgb[0]
+				})
+		))
+			.filter(new Pic(inputfilename))
+			.write("output.png"); 
+
+		printRuntime(start_time);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// the path to the image on your machine
 	private static String IMAGE_PATH = "/Users/XDXD/Downloads/IMG_2528-1.JPG";
@@ -53,19 +85,6 @@ public class Main {
 	// Runtime tools
 	private static long START_TIME;
 
-
-
-
-
-
-	public static void main (String[] args) throws IOException {
-		double start_time = System.nanoTime();
-		String inputfilename = args[0];
-
-		new Pic(inputfilename).write("output.png");
-
-		printRuntime(start_time);
-	}
 
 
     /* INITILIZING IMAGE TOOLS  */

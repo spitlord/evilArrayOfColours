@@ -23,35 +23,37 @@ public class Pic {
 	public byte[] buffer;
 	public int width;
 	public int height;
+	public int size(){ return width*height; }
 
 	//CONSTRUCTORS
-		public Pic(String filename) throws IOException {
-			this(ImageIO.read(new File(filename)));
-		}
-		public Pic(BufferedImage bufferedImage){
-			this(
-				bufferedImage.getWidth(), 
-				bufferedImage.getHeight(),
-				( (DataBufferByte)
-					bufferedImage
-					.getRaster()
-					.getDataBuffer()
-				).getData()
-			);
-		}
-		public Pic(int width, int height){
-			this(
-				width,
-				height,
-				new byte[width*height]
-			);
-		}
-		public Pic(int width, int height, byte[] buffer){
-			this.width  = width;
-			this.height = height;
-			this.buffer = buffer;
-		}
+	public Pic(String filename) throws IOException {
+		this(ImageIO.read(new File(filename)));
+	}
+	public Pic(BufferedImage bufferedImage){
+		this(
+			bufferedImage.getWidth(), 
+			bufferedImage.getHeight(),
+			( (DataBufferByte)
+				bufferedImage
+				.getRaster()
+				.getDataBuffer()
+			).getData()
+		);
+	}
+	public Pic(int width, int height){
+		this(
+			width,
+			height,
+			new byte[width*height*3]
+		);
+	}
+	public Pic(int width, int height, byte[] buffer){
+		this.width  = width;
+		this.height = height;
+		this.buffer = buffer;
+	}
 	
+	//WRITEOUT
 	public void write(File file, String format) throws IOException {
 		ImageIO.write(
 			createRGBImage(
@@ -70,61 +72,59 @@ public class Pic {
 		);
 	}
 
-	public byte getChannel(int channel, int index){
+	//PER-CHANNEL GET/SET
+	public byte get(int channel, int index){
 		return this.buffer[channel+index*3];
 	}
-	public byte getChannel(int channel, int x, int y){
-		return this.getChannel(
+	public byte get(int channel, int x, int y){
+		return this.get(
 			channel,
 			this.index(x,y)
 		);
 	}
-
-	public void setChannel(int channel, int index, byte value){
+	public void set(int channel, int index, byte value){
 		this.buffer[ channel + index*3 ] = value;
 	}
-	public void setChannel(int channel, int x, int y, byte value){
-		this.setChannel(
+	public void set(int channel, int x, int y, byte value){
+		this.set(
 			channel,
 			this.index(x,y),
 			value
 		);
 	}
 
-	public byte[] get(int index){
-		int startIndex = index;
+	// RGB GET/SET
+	public byte[] getRGB(int index){
 		return (Arrays.copyOfRange(
 			this.buffer,
-			startIndex,
-			startIndex + 3
+			index*3,
+			index*3 + 3
 		));
 	}
-	public byte[] get(int x, int y){
-		return this.get(this.index(x,y));
+	public byte[] getRGB(int x, int y){
+		return this.getRGB(this.index(x,y));
 	}
-	public void set(int index, byte[] color){
+	public void setRGB(int index, byte[] color){
 		System.arraycopy(
 			color,
 			0,
 			this.buffer,
-			index,
+			index*3,
 			3
 		);
 	}
-
-
-	public void set(int x, int y, byte[] color){
-		this.set(
+	public void setRGB(int x, int y, byte[] color){
+		this.setRGB(
 			this.index(x,y),
 			color
 		);
 	}
 	
 
+	//AIDENT METHODS (PRIVATE)
 	private int index(int x, int y){
 		return x + this.width * y;
 	}
-
 	private static BufferedImage createRGBImage(byte[] bytes, int width, int height) {
 		return new BufferedImage(
 			new ComponentColorModel(
@@ -148,5 +148,4 @@ public class Pic {
 			null
 		);
 	}
-
 }
