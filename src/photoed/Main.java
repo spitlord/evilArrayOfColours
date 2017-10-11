@@ -1,7 +1,8 @@
 package photoed;
 
 
-import photoed.filters.*;
+import photoed.filters.Filter;
+import photoed.filters.pixelwise.Pixelwise;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -27,24 +28,25 @@ import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 
 public class Main {
-
 	public static void main (String[] args) throws IOException {
 		double start_time = System.nanoTime();
 		String inputfilename = args[0];
 
-		(new Pixelwise(
-			(byte[] rgb) -> (new byte[]{
-				rgb[2],
-				rgb[1],
-				rgb[0]
-				})
-		))
-			.filter(new Pic(inputfilename))
-			.write("output.png"); 
+		double[] coeff = new double[]{
+			1	,1	,0	,
+			1	,-1	,0	,
+			1	,-8	,5	,
+		};
+		new Pixelwise(
+			(r,g,b) -> new double[]{
+				coeff[0]*(r) + coeff[1]*(g) + coeff[2]*(b),
+				coeff[3]*(r) + coeff[4]*(g) + coeff[5]*(b), 
+				coeff[6]*(r) + coeff[7]*(g) + coeff[8]*(b) 
+			}
+		) .filter(new Pic(inputfilename)) .write("output.png"); 
 
 		printRuntime(start_time);
 	}
-
 
 
 

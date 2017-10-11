@@ -1,4 +1,4 @@
-package photoed.filters;
+package photoed.filters.pixelwise;
 
 import photoed.Pic;
 import photoed.filters.Filter;
@@ -21,7 +21,11 @@ public class Pixelwise implements Filter {
 		PixelMap map = this.generator.generate(args);
 		Pic newPic = new Pic(pic.width, pic.height);
 		for(int i=0;i<pic.size();i++){
-			newPic.setRGB(i,map.map(pic.getRGB(i)));
+			newPic.setRGB(i,map.map(
+				pic.get(0,i),
+				pic.get(1,i),
+				pic.get(2,i)
+			));
 		}
 		return newPic;
 	}

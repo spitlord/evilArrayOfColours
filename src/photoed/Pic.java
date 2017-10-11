@@ -73,19 +73,19 @@ public class Pic {
 	}
 
 	//PER-CHANNEL GET/SET
-	public byte get(int channel, int index){
-		return this.buffer[channel+index*3];
+	public double get(int channel, int index){
+		return doubleOf(this.buffer[channel+index*3]);
 	}
-	public byte get(int channel, int x, int y){
+	public double get(int channel, int x, int y){
 		return this.get(
 			channel,
 			this.index(x,y)
 		);
 	}
-	public void set(int channel, int index, byte value){
-		this.buffer[ channel + index*3 ] = value;
+	public void set(int channel, int index, double value){
+		this.buffer[ channel + index*3 ] = byteOf(value);
 	}
-	public void set(int channel, int x, int y, byte value){
+	public void set(int channel, int x, int y, double value){
 		this.set(
 			channel,
 			this.index(x,y),
@@ -94,26 +94,22 @@ public class Pic {
 	}
 
 	// RGB GET/SET
-	public byte[] getRGB(int index){
-		return (Arrays.copyOfRange(
-			this.buffer,
-			index*3,
-			index*3 + 3
-		));
+	public double[] getRGB(int index){
+		return new double[]{
+			get(0,index),
+			get(1,index),
+			get(2,index)
+		};
 	}
-	public byte[] getRGB(int x, int y){
+	public double[] getRGB(int x, int y){
 		return this.getRGB(this.index(x,y));
 	}
-	public void setRGB(int index, byte[] color){
-		System.arraycopy(
-			color,
-			0,
-			this.buffer,
-			index*3,
-			3
-		);
+	public void setRGB(int index, double[] color){
+		for(int i=0; i<3; i++){
+			set( i, index, color[i] );
+		}
 	}
-	public void setRGB(int x, int y, byte[] color){
+	public void setRGB(int x, int y, double[] color){
 		this.setRGB(
 			this.index(x,y),
 			color
@@ -124,6 +120,18 @@ public class Pic {
 	//AIDENT METHODS (PRIVATE)
 	private int index(int x, int y){
 		return x + this.width * y;
+	}
+	private static byte byteOf(double double_){
+		if(double_>255){
+			return (byte) 0xff;
+		}else if(double_<0){
+			return (byte) 0;
+		}else{
+			return (byte)double_;
+		}
+	}
+	private static double doubleOf(byte byte_){
+		return (double)(0xff&(int)byte_);
 	}
 	private static BufferedImage createRGBImage(byte[] bytes, int width, int height) {
 		return new BufferedImage(
