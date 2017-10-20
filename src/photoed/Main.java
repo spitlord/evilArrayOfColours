@@ -3,6 +3,9 @@ package photoed;
 
 import photoed.filters.Filter;
 import photoed.filters.pixelwise.Pixelwise;
+import photoed.filters.pixelwise.Linear;
+
+import java.util.stream.IntStream;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -32,16 +35,15 @@ public class Main {
 		double start_time = System.nanoTime();
 		String inputfilename = args[0];
 
-		double[] coeff = new double[]{
-			1	,1	,0	,
-			1	,-1	,0	,
-			1	,-8	,5	,
-		};
-		new Pixelwise(
-			(r,g,b) -> new double[]{
-				coeff[0]*(r) + coeff[1]*(g) + coeff[2]*(b),
-				coeff[3]*(r) + coeff[4]*(g) + coeff[5]*(b), 
-				coeff[6]*(r) + coeff[7]*(g) + coeff[8]*(b) 
+		new Linear(
+			new double[][]{
+				{	1	,1	,1	},
+				{	1	,.5	,0	},
+				{	0	,0	,1	}
+			}, new double[][]{
+				{	1	,1	,1	},
+				{	-1	,-1	,-1	},
+				{	-.5	,-.4	,1	}
 			}
 		) .filter(new Pic(inputfilename)) .write("output.png"); 
 

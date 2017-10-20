@@ -122,16 +122,16 @@ public class Pic {
 		return x + this.width * y;
 	}
 	private static byte byteOf(double double_){
-		if(double_>255){
+		if(double_ > 1){
 			return (byte) 0xff;
-		}else if(double_<0){
+		}else if(double_ < 0){
 			return (byte) 0;
 		}else{
-			return (byte)double_;
+			return (byte)(255*double_);
 		}
 	}
 	private static double doubleOf(byte byte_){
-		return (double)(0xff&(int)byte_);
+		return (double)(0xff&(int)byte_)/255;
 	}
 	private static BufferedImage createRGBImage(byte[] bytes, int width, int height) {
 		return new BufferedImage(
