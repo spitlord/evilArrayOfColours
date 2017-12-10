@@ -187,6 +187,7 @@ public class Pic {
 	}
         
         
+               
         // in this case, do people need both methods to be public?
         // since one of them is helper
         // We should discuss conventions for filters
@@ -202,9 +203,13 @@ public class Pic {
 			color
 		);
 	}
+        
+        // shall we have methods for set 
 	
 
 	//AIDENT METHODS (PRIVATE)
+        
+        // returns index of the pixel in the byte array 
 	private int index(int x, int y){
 		return x + this.width * y;
 	}
@@ -227,14 +232,19 @@ public class Pic {
        
         // I think you neglected that byte array has negative values [-128, 127]
         // I tested the function and it gives 0.5 for -128, whereas it should give 0.0;
-        // this is what it should be (?)
+      
+        
+        // this is what it should be
         // private static double doubleOf(byte byte_){
         //       return (0xff&(byte_ + 128))/255.0;
 
 
+        // converts byte RGB value into double value d [0, 1]
 	private static double doubleOf(byte byte_){
 		return (double)(0xff&(int)byte_)/255;
 	}
+        
+        
 	private static BufferedImage createRGBImage(byte[] bytes, int width, int height) {
 		return new BufferedImage(
 			new ComponentColorModel(
