@@ -27,7 +27,14 @@ public class Pic {
 
 	//CONSTRUCTORS
         // It is bad practice to have multiple constructors (look up telescoping constructors)
-        // Instead, I propose that we introduce initialization functions for different cases
+        // Constructors shouldn't have much functionality
+        
+        //  I propose that we  only keep Pic (int width, int height, int buffer) 
+        //  And we introduce initialization functions for different cases such as 
+        // 1. initialize from image file initImage(File imageFile)
+        // 2. initialize empty image with height and width
+
+       
         
 
         

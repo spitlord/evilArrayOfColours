@@ -33,7 +33,9 @@ import java.awt.color.ColorSpace;
 public class Main {
 	public static void main (String[] args) throws IOException {
 		double start_time = System.nanoTime();
-		String inputfilename = args[0];
+		String inputfilename = "/Users/XDXD/Downloads/St-Petersburg-Metro-Map.jpg";
+                
+                
 
 		new Linear(
 			new double[][]{
