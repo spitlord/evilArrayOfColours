@@ -31,8 +31,10 @@ public class Pic {
         
         //  I propose that we  only keep Pic (int width, int height, int buffer) 
         //  And we introduce initialization functions for different cases such as 
-        // 1. initialize from image file initImage(File imageFile)
+        // 1. initialize from image file  
+        //         |*| public Pic initImage(File imageFile) |*| 
         // 2. initialize empty image with height and width
+        //         |*| public Pic initEmpty(height, width) |*|
 
        
         
@@ -81,12 +83,12 @@ public class Pic {
 		);
 	}
         
-        // word this is only needed in cases of construtors
-        // e.g:
-        //  Dog (String name, int legs) {
-        //         this.name = name;
-        //         this.legs = legs;
-        //  }
+        //  word this is only needed in cases of construtors
+        //  e.g:
+        //         Dog (String name, int legs) {
+        //                  this.name = name;
+        //                  this.legs = legs;
+        //         }
         
         //  Now you can just use name and legs without word this in methods
         
@@ -116,7 +118,7 @@ public class Pic {
         
         
         
-       
+        
 	public void write(String filename) throws IOException {
             
            
@@ -183,6 +185,12 @@ public class Pic {
 	public double[] getRGB(int x, int y){
 		return this.getRGB(this.index(x,y));
 	}
+        
+        
+        // in this case, do people need both methods to be public?
+        // since one of them is helper
+        // We should discuss conventions for filters
+        // as in how they traverse the byte array;
 	public void setRGB(int index, double[] color){
 		for(int i=0; i<3; i++){
 			set( i, index, color[i] );
@@ -202,16 +210,28 @@ public class Pic {
 	}
         
         
-        // double_ XD this is such a bad name
+        // better double_ XD this is such a bad name
+        // RGBdoubleValue
+
 	private static byte byteOf(double double_){
 		if(double_ > 1){
 			return (byte) 0xff;
 		}else if(double_ < 0){
 			return (byte) 0;
 		}else{
-			return (byte)(255*double_);
+			return (byte)(255*double_); // [-128, 127]!!  read next comment / subtract 128 to convert 
 		}
 	}
+        
+    
+       
+        // I think you neglected that byte array has negative values [-128, 127]
+        // I tested the function and it gives 0.5 for -128, whereas it should give 0.0;
+        // this is what it should be (?)
+        // private static double doubleOf(byte byte_){
+        //       return (0xff&(byte_ + 128))/255.0;
+
+
 	private static double doubleOf(byte byte_){
 		return (double)(0xff&(int)byte_)/255;
 	}
