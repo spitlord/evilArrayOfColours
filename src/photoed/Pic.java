@@ -36,6 +36,9 @@ public class Pic {
         // 2. initialize empty image with height and width
         //         |*| public Pic initEmpty(height, width) |*|
 
+		// This is okay with me.
+		// I'm still not sure why it's better though.
+
        
         
 
@@ -96,6 +99,25 @@ public class Pic {
         
         // public void amputateLeg() { if (legs > 0) legs = legs - 1; } // pretty
         // public void amputateLeg() { if (this.legs > 0) this.legs = this.legs - 1; } // ugly
+
+        // public void amputateLeg() { //pretty
+	//	if (this.legs > 0){
+	//		this.legs = this.legs - 1;
+	//	}
+	// }
+
+        // public void amputateLeg() { // prettier
+	//	if (this.legs > 0) this.legs -= 1;
+	// }
+
+		// you want to not use "this"; i understand.
+		// I like it because
+		//	you don't have to keep track of where openMouth is coming from
+		//		(which would be more confusing in case of a name like "index".
+		//	you don't have to worry about whether or not your class variable has the same name as another identifier.
+		//	it reminds you that calling "openMouth" may modify "this"
+		//		If you're looking for when "this" was modified,
+		//		you can just search for "this".
         
         
         //
@@ -115,7 +137,7 @@ public class Pic {
         
        
         //  Adding "this" makes the code look cumbersome and complicated.
-        
+		// Adding "this" makes the code look explicit and clear.
         
         
         
@@ -134,6 +156,7 @@ public class Pic {
         // We should rename these functions for more clarity.
         // Everything should have an explicit name.
         // Put as much meaning in every name.
+	//	That's a good idea; feel free to rename.
         // Also for methods with few arguments. It's kinda confusing to write
         // each argument in a new line.
         // I think it  should only be done if there are too many arguments.
@@ -145,11 +168,24 @@ public class Pic {
 	//	                             )
         //
         //      return this.get(channel, this.index(x,y));          /// pretty
+
+		// 1stly, i'm just indenting with one tab like this:
+		//      return this.get(      /// pretty
+		//		channel,
+		//		this.index(x,y)
+		//	);
+		// I'm not trying to align anything.
+		
+		// I understand using this for simpler arguments,
+		// but i think for more complex arguments, it can look better.
+
+	
      
         
         
         // Also, lets agree to comment on all the functions that we create.
         // It will help a lot for both of us to understand what we mean;
+		// ya, i'll comment the ones i did so far.
         
 	public double get(int channel, int index){
 		return doubleOf(this.buffer[channel+index*3]);
@@ -192,6 +228,8 @@ public class Pic {
         // since one of them is helper
         // We should discuss conventions for filters
         // as in how they traverse the byte array;
+		// we could get rid of the 1D access methods
+		// actually, i think that's most intuitive (and best)
 	public void setRGB(int index, double[] color){
 		for(int i=0; i<3; i++){
 			set( i, index, color[i] );
@@ -217,7 +255,12 @@ public class Pic {
         
         // better double_ XD this is such a bad name
         // RGBdoubleValue
+		// The function just takes an arbitrary double and converts it to a byte
+		// so adding rgb to the name is not meaningful.
+		// I still think double_ is a good name.
 
+	// converts double to unsigned byte
+	// normalized so 0. goes to 0x00 and 1. goes to 0xff
 	private static byte byteOf(double double_){
 		if(double_ > 1){
 			return (byte) 0xff;
@@ -237,9 +280,26 @@ public class Pic {
         // this is what it should be
         // private static double doubleOf(byte byte_){
         //       return (0xff&(byte_ + 128))/255.0;
+	// }
+	
+		// The bytes are interpreted as unsigned,
+		// so the current function is good,
+		// and -128 actually shOUld correspond to .5.
+		// This makes sense, there'd be no need for a negative value of color.
+
+		// A byte is literally just a sequence of 8 bits.
+		// It doesn't have any numerical value per se.
+		// There are two common ways of interpreting it: signed and unsigned.
+		// the default way for Java to turn a byte into a number inteprets them as signed,
+		// but the image library makes an array of bytes
+		// with the understanding that the values will be interpreted as signed.
+
+		// I tried replacing doubleOf with your suggestion,
+		// but it was not correct (not linear).
 
 
-        // converts byte RGB value into double value d [0, 1]
+
+        // converts unsigned byte value into double value d [0, 1]
 	private static double doubleOf(byte byte_){
 		return (double)(0xff&(int)byte_)/255;
 	}
