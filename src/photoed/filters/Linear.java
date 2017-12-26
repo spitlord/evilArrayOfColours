@@ -1,22 +1,29 @@
-package photoed.filters.pixelwise;
+package photoed.filters;
 
 import java.util.stream.IntStream;
 
-public class Linear extends Pixelwise{
+public class Linear extends Pixelwise {
+	//This is a filter that makes the new colors linear combinations of the old colors.
+
+	//You can initialize from the matrix elements themselves.
 	public Linear(double[][] matrixElements){
-		super( (r,g,b) -> IntStream.range(0,3).mapToDouble( i -> 
-			matrixElements[i][0]*r +
-			matrixElements[i][1]*g +
-			matrixElements[i][2]*b
+		super( color -> IntStream.range(0,3).mapToDouble( i -> 
+			matrixElements[i][0]*color[0] +
+			matrixElements[i][1]*color[1] +
+			matrixElements[i][2]*color[2]
 		).toArray());
 	}
-	public Linear(double[][] inbasis,double[][] outbasis){
+
+	// maps each vector in input to the corresponding vector in output
+	// If input vectors are not independent, it always returrns black.
+	public Linear(double[][] input,double[][] output){
 		this( multiply(
-			transpose(outbasis),
-			invert(transpose(inbasis))
+			transpose(output),
+			invert(transpose(input))
 		) );
 	}
 
+	// multiplies two 3x3 matrices
 	private static double[][] multiply(double[][] A,double[][] B){
 		double[][] out = new double[3][3];
 
@@ -30,6 +37,9 @@ public class Linear extends Pixelwise{
 
 		return out;
 	}
+	
+	// finds the inverse of a 3x3 matrix.
+	// returns 0 if input is not invertible
 	private static double[][] invert(double[][] in){
 		double[][] out = new double[3][3];
 
@@ -57,6 +67,8 @@ public class Linear extends Pixelwise{
 		out[2][0] = t30; out[2][1] = t31; out[2][2] = t32;
 		return out;
 	}
+	
+	// transposes 3x3 matrix
 	private static double[][] transpose(double[][] in){
 		double[][] out = new double[3][3];
 		for(int i=0;i<3;i++){
