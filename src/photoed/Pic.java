@@ -75,8 +75,6 @@ public class Pic {
 	public void write(File file, String format) throws IOException {
 		ImageIO.write(
 			createRGBImage(
-                                // word "this" in here is redundant
-
 				this.buffer,
 				this.width,
 				this.height
@@ -86,60 +84,7 @@ public class Pic {
 		);
 	}
         
-        //  word this is only needed in cases of construtors
-        //  e.g:
-        //         Dog (String name, int legs) {
-        //                  this.name = name;
-        //                  this.legs = legs;
-        //         }
-        
-        //  Now you can just use name and legs without word this in methods
-        
-        
-        
-        // public void amputateLeg() { if (legs > 0) legs = legs - 1; } // pretty
-        // public void amputateLeg() { if (this.legs > 0) this.legs = this.legs - 1; } // ugly
-
-        // public void amputateLeg() { //pretty
-	//	if (this.legs > 0){
-	//		this.legs = this.legs - 1;
-	//	}
-	// }
-
-        // public void amputateLeg() { // prettier
-	//	if (this.legs > 0) this.legs -= 1;
-	// }
-
-		// you want to not use "this"; i understand.
-		// I like it because
-		//	you don't have to keep track of where openMouth is coming from
-		//		(which would be more confusing in case of a name like "index".
-		//	you don't have to worry about whether or not your class variable has the same name as another identifier.
-		//	it reminds you that calling "openMouth" may modify "this"
-		//		If you're looking for when "this" was modified,
-		//		you can just search for "this".
-        
-        
-        //
-        //   private void  openMouth() { ... }
-        //   private void  makeSound() { ... }
-       
-        //   public void bark() { 
-        //         this.openMouth();    // redundant
-        //         this.makeSound();    // redundant
-        //   }
-        //
-        
-        //   public void bark() { 
-        //        openMouth();          // still refering to this
-        //        makeSound();          // 
-        //   }
-        
-       
-        //  Adding "this" makes the code look cumbersome and complicated.
-		// Adding "this" makes the code look explicit and clear.
-        
-        
+ 
         
 	public void write(String filename) throws IOException {
             
@@ -154,47 +99,20 @@ public class Pic {
 	//PER-CHANNEL GET/SET
         // I feel like words "get" and "set" should not be resereved
         // We should rename these functions for more clarity.
-        // Everything should have an explicit name.
-        // Put as much meaning in every name.
-	//	That's a good idea; feel free to rename.
-        // Also for methods with few arguments. It's kinda confusing to write
-        // each argument in a new line.
-        // I think it  should only be done if there are too many arguments.
-        // Every line is for a its own idea. One idea shouldn't occupy more space
-        // than it needs.
-        //                    return this.get(
-	//		                          channel,
-	//		                          this.index(x,y)   /// ugly
-	//	                             )
-        //
-        //      return this.get(channel, this.index(x,y));          /// pretty
-
-		// 1stly, i'm just indenting with one tab like this:
-		//      return this.get(      /// pretty
-		//		channel,
-		//		this.index(x,y)
-		//	);
-		// I'm not trying to align anything.
-		
-		// I understand using this for simpler arguments,
-		// but i think for more complex arguments, it can look better.
-
+       
 	
-     
         
-        
-        // Also, lets agree to comment on all the functions that we create.
-        // It will help a lot for both of us to understand what we mean;
-		// ya, i'll comment the ones i did so far.
+        // Lets do convention, for 4 and more arguments, we do newlines
+        // Else one line (unless too long, or multiple function calls)
+
+
+        // ya, i'll comment the ones i did so far.
         
 	public double get(int channel, int index){
 		return doubleOf(this.buffer[channel+index*3]);
 	}
 	public double get(int channel, int x, int y){
-		return this.get(
-			channel,
-			this.index(x,y)
-		);
+		return this.get(channel, this.index(x,y));
 	}
 	public void set(int channel, int index, double value){
 		this.buffer[ channel + index*3 ] = byteOf(value);
@@ -224,12 +142,12 @@ public class Pic {
         
         
                
-        // in this case, do people need both methods to be public?
-        // since one of them is helper
-        // We should discuss conventions for filters
-        // as in how they traverse the byte array;
+       
 		// we could get rid of the 1D access methods
-		// actually, i think that's most intuitive (and best)
+		// actually, i think that's most intuitive (and best) 
+        
+                // what is best?
+        
 	public void setRGB(int index, double[] color){
 		for(int i=0; i<3; i++){
 			set( i, index, color[i] );
@@ -253,12 +171,8 @@ public class Pic {
 	}
         
         
-        // better double_ XD this is such a bad name
-        // RGBdoubleValue
-		// The function just takes an arbitrary double and converts it to a byte
-		// so adding rgb to the name is not meaningful.
-		// I still think double_ is a good name.
-
+     
+        
 	// converts double to unsigned byte
 	// normalized so 0. goes to 0x00 and 1. goes to 0xff
 	private static byte byteOf(double double_){

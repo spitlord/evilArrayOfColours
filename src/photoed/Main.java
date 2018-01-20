@@ -39,8 +39,8 @@ public class Main {
 
 		new Linear(
 			new double[][]{
-				{	1	,1	,1	},
-				{	1	,.5	,0	},
+				{	0.7	,1	,1	},
+				{	1	,.5	,0.7	},
 				{	0	,0	,1	}
 			}, new double[][]{
 				{	1	,1	,1	},
