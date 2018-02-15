@@ -1,41 +1,18 @@
 package photoed;
 
 
-import photoed.filters.Filter;
-import photoed.filters.pixelwise.Pixelwise;
-import photoed.filters.pixelwise.Linear;
+import photoed.filters.Pixelwise;
+import photoed.filters.Linear;
 
-import java.util.stream.IntStream;
-
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ComponentColorModel;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import javax.imageio.ImageIO;
-import java.awt.Image;
-import java.awt.Transparency;
-import java.awt.color.ColorSpace;
 
 public class Main {
+	//applies the filter to the first command line argument
+	//and saves the resultant image as the second command line argument
 	public static void main (String[] args) throws IOException {
 		double start_time = System.nanoTime();
-		String inputfilename = "/Users/XDXD/Downloads/St-Petersburg-Metro-Map.jpg";
-                
-                
+		String inputFilename = args[0];
+		String outputFilename = args[1];
 
 		new Linear(
 			new double[][]{
@@ -43,16 +20,17 @@ public class Main {
 				{	1	,.5	,0.7	},
 				{	0	,0	,1	}
 			}, new double[][]{
-				{	1	,1	,1	},
-				{	-1	,-1	,-1	},
-				{	-.5	,-.4	,1	}
+				{	0,	0,	1	},
+				{	0,	0,	1	},
+				{	1,	1.5,	2	}
 			}
-		) .filter(new Pic(inputfilename)) .write("output.png"); 
+		) .apply(new Pic(inputFilename)) .write(outputFilename); 
 
 		printRuntime(start_time);
 	}
 	
 
+	// returns a randam string of length howManyCharacters
 	private static String makeUpName(int howManyCharacters) {
 		String suffix = "_";
 		for (int ii = 0; ii < howManyCharacters; ii++) {
@@ -64,15 +42,11 @@ public class Main {
 
 
 	// prints how long it took the program to complete
-
 	private static void printRuntime(double start_time) {
-		System.out.println( "The program completed in " + ((System.nanoTime() - start_time)/1000000000.0) + " seconds.");
+		System.out.println(
+			  "The program completed in "
+			+ ((System.nanoTime() - start_time)/1000000000.0)
+			+ " seconds."
+		);
 	}
-
-
-
-
-
-
-
 }
