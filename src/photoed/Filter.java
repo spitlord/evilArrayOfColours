@@ -1,7 +1,7 @@
 import java.awt.image.BufferedImage;
 
 public class Filter extends Thread {
-
+        // aaoh
 	// 1: filter with BufferedImage.getRGB and BufferedImage.setRGB
 
 	public static byte[] fil1 (byte[] a) {
